@@ -3,6 +3,10 @@
 Created on Mon May 17 22:41:22 2021
 
 @author: Kiminjo
+
+Modified on Tue May 21 2024
+Cuda is available now.
+Feat.KwakJewoo
 """
 
 import numpy as np
@@ -41,25 +45,24 @@ def generate(model, seed_characters, temperature, network_type, char2int_dict, i
         
     return ''.join(samples)
 
-
-def predict(model, string, hidden, temperature, char2int_dict, int2char_dict, device, network_type) :
+def predict(model, string, hidden, temperature, char2int_dict, int2char_dict, device, network_type):
     x = torch.tensor([[char2int_dict[string]]], dtype=torch.float)
     x = one_hot_encoding(x)
-    x = x.to(device)
+    x = x.to(device)  # Ensure input tensor is on the correct device
     
-    if network_type == 'RNN' :
-        hidden = tuple([each.data for each in hidden])[0].reshape(1, -1, 512)
-    else :
-        hidden = tuple([each.data for each in hidden])
-        
+    # Move each tensor in the hidden state tuple to the specified device
+    if isinstance(hidden, tuple):
+        hidden = tuple(h.to(device) for h in hidden)
+    else:
+        hidden = hidden.to(device)
+    
     output, hidden = model.forward(x, hidden)
     
-    prob = F.softmax(output, dim=1).data
-    prob, top_char = prob.topk(temperature)
-    top_char = top_char.numpy().squeeze()
-    prob = prob.numpy().squeeze()
+    # Apply temperature to the output probabilities
+    prob = F.softmax(output / temperature, dim=1).data
     
-    character = np.random.choice(top_char, p=prob/prob.sum())
-    character = int2char_dict[character]
+    # Sample a character from the probability distribution
+    top_char = torch.multinomial(prob, 1).cpu().numpy().squeeze()
+    character = int2char_dict[int(top_char)]
     
     return character, hidden
