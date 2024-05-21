@@ -1,7 +1,14 @@
 # Character Level Langauge Model
 
-Deep Learning Assignment2, 인공신경망과 딥러닝 과제2
+Deep Learning Assignment2, 인공신경망과 딥러닝 과제2  
 This Assigment is work on a neural network for character-level language modeling with the Shakespeare dataset. The language model is "many-to-many" recurrent neural networks.
+<br></br>
+
+## Contents
+In this repository, I have contributed by modifying the code to run on CUDA. Additionally, I conducted a study comparing the performance of single-layer RNN and LSTM models with two-layer RNN and LSTM models, and documented the results in the result_file.
+
+The results indicate that LSTM models outperform RNN models. Furthermore, two-layer LSTM models show better performance than single-layer LSTM models, as evidenced by the continuous decrease in validation loss.
+
 <br></br>
 
 ## Character level langauge model
