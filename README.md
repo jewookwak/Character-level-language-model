@@ -13,6 +13,11 @@ The result_files has text files which contain generated charaters length over 10
 
 <br></br>
 
+## Contents
+https://github.com/jewookwak/Language-Modeling/issues/1#issue-2308048360
+
+<br></br>
+
 ## Character level langauge model
 
 It has the same structure as the existing RNN model, but has one alphabetic character, not a token, as an input. At this time, characters include spaces, paragraph changes, etc.
