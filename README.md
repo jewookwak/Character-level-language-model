@@ -15,7 +15,7 @@ The result_files has text files which contain generated charaters length over 10
 
 ## Softmax Temperature
 ![image](https://github.com/jewookwak/Language-Modeling/assets/65706899/d266c5c4-c472-4a2a-bd38-de90d548ea3f)
-
+![image](https://github.com/jewookwak/Language-Modeling/assets/65706899/58486d44-ef78-41a9-b1d8-45c4ab6fd830)
 <br></br>
 
 
