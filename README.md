@@ -9,6 +9,8 @@ In this repository, I have contributed by modifying the code to run on CUDA. Add
 
 The results indicate that LSTM models outperform RNN models. Furthermore, two-layer LSTM models show better performance than single-layer LSTM models, as evidenced by the continuous decrease in validation loss.
 
+The result_files has text files which contain generated charaters length over 100 length. Each text file's name has a number which indicates T(temperature parameter of Softmax function). Range of T is 1~5. T1 has least entropy and T5 has most entropy. 
+
 <br></br>
 
 ## Character level langauge model
