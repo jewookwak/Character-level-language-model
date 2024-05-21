@@ -1,7 +1,7 @@
 # Character Level Langauge Model
 
-It aims to write new sentences by learning character units sentences using RNN. As training data, a collection of Shakespeare's novels was used. This project was carried out as part of the 'Artificial Neural Networks and Deep Learning' class in the Spring Semester of Data Science at Seoul National University of Science and Technology in 2021.
-
+Deep Learning Assignment2, 인공신경망과 딥러닝 과제2
+This Assigment is work on a neural network for character-level language modeling with the Shakespeare dataset. The language model is "many-to-many" recurrent neural networks.
 <br></br>
 
 ## Character level langauge model
