@@ -17,8 +17,8 @@ The result_files has text files which contain generated charaters length over 10
 
 ![image](https://github.com/jewookwak/Language-Modeling/assets/65706899/58486d44-ef78-41a9-b1d8-45c4ab6fd830)
 
-T is temperature scaling add it adds randomness.It characterizes the entropy of the probability distribution used for sampling, in other words, it controls how surprising or predictable the next word will be.
-Please check [here]https://medium.com/@harshit158/softmax-temperature-5492e4007f71, if you interested in softmax temperature.
+T is temperature scaling add it adds randomness.It characterizes the entropy of the probability distribution used for sampling, in other words, it controls how surprising or predictable the next word will be.  
+Please check [here](https://medium.com/@harshit158/softmax-temperature-5492e4007f71), if you interested in softmax temperature.
 
 <br></br>
 
