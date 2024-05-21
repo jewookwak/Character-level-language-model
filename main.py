@@ -3,6 +3,10 @@
 Created on Mon May 17 22:40:56 2021
 
 @author: Kiminjo
+
+Modified on Tue May 21 2024
+Cuda is available now.
+feat. KwakJewoo
 """
 
 import torch
@@ -34,6 +38,10 @@ def train(model, trn_loader, device, criterion, optimizer, batch_size, network_t
     trn_loss = 0
     
     hidden = model.init_hidden(batch_size)
+    if isinstance(hidden, tuple):
+        hidden = (hidden[0].to(device), hidden[1].to(device))
+    else:
+        hidden = hidden.to(device)
     
     for batch_idx, batch in enumerate(trn_loader) :
         x, label = batch
@@ -41,13 +49,15 @@ def train(model, trn_loader, device, criterion, optimizer, batch_size, network_t
         # input sequence x should be form of one hot vector 
         x = one_hot_encoding(x)
         x = x.to(device); label = label.to(device)
-        if network_type=='RNN' :
-            hidden = tuple([each.data for each in hidden])[0].reshape(model.num_layer, 100, model.hidden_size)
+        if network_type == 'RNN' :
+            hidden = tuple([each.data for each in hidden])[0].reshape(model.num_layer, batch_size, model.hidden_size).to(device)
         else :
             hidden = tuple([each.data for each in hidden])
+            hidden = (hidden[0].to(device), hidden[1].to(device))
+
         optimizer.zero_grad()
         output, hidden = model.forward(x, hidden)
-        cost = criterion(output, label.view(3000).long())
+        cost = criterion(output, label.view(-1).long())
         cost.backward(retain_graph=True)
         optimizer.step()
         
@@ -78,6 +88,10 @@ def validate(model, val_loader, device, criterion, batch_size, network_type='RNN
     val_loss = 0
     
     hidden = model.init_hidden(batch_size)
+    if isinstance(hidden, tuple):
+        hidden = (hidden[0].to(device), hidden[1].to(device))
+    else:
+        hidden = hidden.to(device)
     
     for batch_idx, batch in enumerate(val_loader) :
         x, label = batch
@@ -85,12 +99,14 @@ def validate(model, val_loader, device, criterion, batch_size, network_type='RNN
         # input sequence x should be form of one hot vector 
         x = one_hot_encoding(x)
         x = x.to(device); label = label.to(device)
-        if network_type=='RNN' :
-            hidden = tuple([each.data for each in hidden])[0].reshape(1, -1, 512)
+        if network_type == 'RNN' :
+            hidden = tuple([each.data for each in hidden])[0].reshape(model.num_layer, batch_size, model.hidden_size).to(device)
         else :
             hidden = tuple([each.data for each in hidden])
+            hidden = (hidden[0].to(device), hidden[1].to(device))
+
         output, hidden = model.forward(x, hidden)
-        cost = criterion(output, label.view(3000).long())
+        cost = criterion(output, label.view(-1).long())
         
         val_loss += cost.item()
 
@@ -112,7 +128,7 @@ def main():
     """
     
     input_file = open('data/shakespeare_train.txt', 'r').read()
-    epochs = 5
+    epochs = 10
     batch_size = 100
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
@@ -139,11 +155,11 @@ def main():
         print('epoch : {}, train loss : {}, validation loss : {}'.format(epoch+1, train_loss, test_loss))
         
         rnn_trn_loss.append(train_loss); rnn_val_loss.append(test_loss)
-        
-    rnn_generated_text = generate(rnn_model, 'The', 5, 'RNN', train_dataset.char2int, train_dataset.int2char)
-    rnn_text = open('rnn.txt', 'w')
-    rnn_text.write(rnn_generated_text)
-    rnn_text.close()
+    for temperature in [1,2,3,4,5]:      
+        rnn_generated_text = generate(rnn_model, 'The', temperature, 'RNN', train_dataset.char2int, train_dataset.int2char)
+        rnn_text = open('rnn_T'+str(temperature)+'.txt', 'w')
+        rnn_text.write(rnn_generated_text)
+        rnn_text.close()
     
     
     
@@ -165,12 +181,12 @@ def main():
         
         lstm_trn_loss.append(train_loss); lstm_val_loss.append(test_loss)
         
+    for temperature in [1,2,3,4,5]:      
+        lstm_generated_text = generate(lstm_model, 'The', temperature, 'LSTM', train_dataset.char2int, train_dataset.int2char)
+        lstm_text = open('lstm_T'+str(temperature)+'.txt', 'w')
+        lstm_text.write(lstm_generated_text)
+        lstm_text.close()
         
-    lstm_generated_text = generate(lstm_model, 'The', 5, 'LSTM', train_dataset.char2int, train_dataset.int2char)
-    lstm_text = open('lstm.txt', 'w')
-    lstm_text.write(lstm_generated_text)
-    lstm_text.close()
-    
     draw_result_plot(rnn_trn_loss, rnn_val_loss, lstm_trn_loss, lstm_val_loss)
     
 
@@ -198,4 +214,5 @@ def draw_result_plot(rnn_trn, rnn_val, lstm_trn, lstm_val) :
     
     
 if __name__ == '__main__':
+     print('cuda is: ',torch.cuda.is_available())
      main()
