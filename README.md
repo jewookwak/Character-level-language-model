@@ -13,10 +13,11 @@ The result_files has text files which contain generated charaters length over 10
 
 <br></br>
 
-## Contents
-https://github.com/jewookwak/Language-Modeling/issues/1#issue-2308048360
+## Softmax Temperature
+![image](https://github.com/jewookwak/Language-Modeling/assets/65706899/d266c5c4-c472-4a2a-bd38-de90d548ea3f)
 
 <br></br>
+
 
 ## Character level langauge model
 
